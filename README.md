@@ -26,3 +26,6 @@ go run cmd/api/main.go
 
 ## License
 MIT
+
+## Mockgen
+mockgen -source=D:\Projects\capital-gains\service\capital_gain.go -destination=tests/mocks/service/capital_gain_service.go -package=mock_service

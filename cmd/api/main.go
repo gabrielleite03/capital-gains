@@ -8,7 +8,7 @@ import (
 
 	"koto.com/internal/core/models"
 	"koto.com/internal/core/ports"
-	"koto.com/internal/service"
+	"koto.com/service"
 )
 
 func main() {

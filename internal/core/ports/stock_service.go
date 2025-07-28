@@ -28,7 +28,7 @@ func (s *stockServiceImpl) GetStock(in string) (*models.Stock, error) {
 	}
 	err := json.Unmarshal([]byte(in), &operations)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	stock := &models.Stock{
 		Operations: operations,
