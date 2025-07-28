@@ -69,7 +69,6 @@ func (ss *stockServiceImpl) recalculateWeightedAveragePrice(s *models.Stock, o *
 		}
 
 	} else if o.IsSell() {
-		ss.recalculateStockQuantity(s, o)
 		//qual o tal da venda??
 		totalSale := float64(o.UnitCost * float64(o.Quantity))
 		// qual o valor da compra?
