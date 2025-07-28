@@ -1,8 +1,6 @@
 package service
 
 import (
-	"fmt"
-
 	"koto.com/internal/core/models"
 	"koto.com/internal/core/ports"
 )
@@ -26,7 +24,6 @@ func (c *capitalGainService) GetCapitalGain(name string) (*[]models.CapitalGains
 	// Retrieve the stock using the stock service
 	stock, err := c.stockService.GetStock(name)
 	if err != nil {
-		fmt.Println("Error retrieving stock:", err)
 		return nil, err
 
 	}
