@@ -1,4 +1,7 @@
 # Capital Gains
+![My Skills](https://skillicons.dev/icons?i=go)
+
+
 
 This project calculates capital gains for stock operations using Go.
 
