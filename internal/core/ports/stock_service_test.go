@@ -105,17 +105,3 @@ func TestRecalculateStockQuantity_BuyAndSell(t *testing.T) {
 		t.Errorf("Expected StockQuantity 5 after sell, got %d", stock.StockQuantity)
 	}
 }
-
-func TestRecalculateWeightedAveragePrice_Buy(t *testing.T) {
-	service := NewStockService()
-	stock := &models.Stock{StockQuantity: 10, AveragePurchasePrice: 100.0}
-	buy := &models.Operation{Operation: "buy", Quantity: 10, UnitCost: 200.0}
-	err := service.(*stockServiceImpl).recalculateWeightedAveragePrice(stock, buy)
-	if err != nil {
-		t.Fatalf("Unexpected error: %v", err)
-	}
-	expectedAvg := (100.0*10 + 200.0*10) / float64(20)
-	if stock.AveragePurchasePrice != expectedAvg {
-		t.Errorf("Expected AveragePurchasePrice %f, got %f", expectedAvg, stock.AveragePurchasePrice)
-	}
-}

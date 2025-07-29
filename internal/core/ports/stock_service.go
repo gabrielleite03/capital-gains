@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 
+	"koto.com/internal/core/infrastructure"
 	"koto.com/internal/core/models"
 )
 
 type StockService interface {
 	GetStock(name string) (*models.Stock, error)
-	recalculateWeightedAveragePrice(s *models.Stock, o *models.Operation) error
 	recalculateStockQuantity(s *models.Stock, o *models.Operation) error
 }
 
@@ -34,12 +34,9 @@ func (s *stockServiceImpl) GetStock(in string) (*models.Stock, error) {
 		Operations: operations,
 	}
 
-	for i, o := range stock.Operations {
+	for _, o := range stock.Operations {
 		// Recalculate the stock quantity and average price for each operation
 		s.recalculateStockQuantity(stock, o)
-		s.recalculateWeightedAveragePrice(stock, o)
-
-		stock.Operations[i] = o
 	}
 	return stock, nil
 }
@@ -47,20 +44,7 @@ func (s *stockServiceImpl) GetStock(in string) (*models.Stock, error) {
 // recalculateStockQuantity implements StockService.
 func (*stockServiceImpl) recalculateStockQuantity(s *models.Stock, o *models.Operation) error {
 	if o.IsBuy() {
-		o.InitialQuantity = s.StockQuantity
-		s.StockQuantity += uint64(o.Quantity)
-		o.FinalQuantity = s.StockQuantity
-	} else if o.IsSell() {
-		o.InitialQuantity = s.StockQuantity
-		s.StockQuantity -= uint64(o.Quantity)
-		o.FinalQuantity = s.StockQuantity
-	}
-	return nil
-}
 
-// recalculateWeightedAveragePrice implements StockService.
-func (ss *stockServiceImpl) recalculateWeightedAveragePrice(s *models.Stock, o *models.Operation) error {
-	if o.IsBuy() {
 		if s.AveragePurchasePrice == 0 {
 			s.AveragePurchasePrice = o.UnitCost
 		} else {
@@ -68,7 +52,11 @@ func (ss *stockServiceImpl) recalculateWeightedAveragePrice(s *models.Stock, o *
 			s.AveragePurchasePrice = (s.AveragePurchasePrice*float64(s.StockQuantity) + o.UnitCost*float64(o.Quantity)) / float64(s.StockQuantity+uint64(o.Quantity))
 		}
 
+		o.InitialQuantity = s.StockQuantity
+		s.StockQuantity += uint64(o.Quantity)
+		o.FinalQuantity = s.StockQuantity
 	} else if o.IsSell() {
+
 		//qual o tal da venda??
 		totalSale := float64(o.UnitCost * float64(o.Quantity))
 		// qual o valor da compra?
@@ -99,11 +87,14 @@ func (ss *stockServiceImpl) recalculateWeightedAveragePrice(s *models.Stock, o *
 					s.Loss = 0
 				}
 				// calcular o imposto
-				tax := models.MyFloat64((taxValue) * 0.2) // Assuming a 20% tax on profit
-				o.Tax = tax
+				o.Tax = models.MyFloat64((taxValue) * infrastructure.TaxOnProfit) // Assuming a 20% tax on profit
 			}
 
 		}
+
+		o.InitialQuantity = s.StockQuantity
+		s.StockQuantity -= uint64(o.Quantity)
+		o.FinalQuantity = s.StockQuantity
 	}
 	return nil
 }
