@@ -1,60 +1,53 @@
-// Operation represents a financial transaction involving an asset, such as buying or selling.
-// It includes details about the type of operation, unit cost, quantities before and after the transaction,
-// and any tax applied.
-//
-// Fields:
-//   - Operation: The type of operation (buy or sell).
-//   - UnitCost: The cost per individual unit of the asset.
-//   - Quantity: The number of units involved in the operation.
-//   - InitialQuantity: The quantity of the asset before the operation.
-//   - FinalQuantity: The quantity of the asset after the operation.
-//   - Tax: The tax applied to the transaction.
-//
-// Op defines the type for operation identifiers ("buy" or "sell").
-//
-// OpBuy and OpSell are constants representing buy and sell operations.
-//
-// IsBuy returns true if the operation is a buy operation.
-//
-// IsSell returns true if the operation is a sell operation.
-// Operation represents a financial operation involving an asset, such as buying or selling.
-// It contains details about the type of operation, unit cost, quantities before and after the operation,
-// and any tax applied to the transaction.
+// Pacote models contém definições de dados e lógicas associadas a operações financeiras,
+// como compra e venda de ativos.
 package models
 
-// Operation represents a financial transaction involving an asset.
-// It contains details about the type of operation, unit cost, quantities before and after the operation,
-// and any tax applied to the transaction.
+// Operation representa uma transação financeira envolvendo um ativo,
+// como uma operação de compra ou venda.
+//
+// Essa estrutura inclui:
+//   - O tipo da operação (compra ou venda).
+//   - O custo por unidade do ativo.
+//   - A quantidade de unidades envolvidas.
+//   - As quantidades antes e depois da operação.
+//   - O imposto aplicado à transação.
 type Operation struct {
-	// Operation represents the type of operation (buy or sell).
+	// Operation indica o tipo da operação: "buy" (compra) ou "sell" (venda).
 	Operation Op `json:"operation"`
-	// UnitCost represents the cost per individual unit of the asset.
+
+	// UnitCost é o custo por unidade do ativo na operação.
 	UnitCost float64 `json:"unit-cost"`
-	// Quantity represents the number of units involved in the operation.
+
+	// Quantity é a quantidade de unidades envolvidas na operação.
 	Quantity uint64 `json:"quantity"`
-	// InitialQuantity represents the quantity of the asset before the operation.
+
+	// InitialQuantity representa a quantidade do ativo antes da operação.
 	InitialQuantity uint64 `json:"initial-quantity"`
-	// FinalQuantity represents the quantity of the asset after the operation.
+
+	// FinalQuantity representa a quantidade do ativo após a operação.
 	FinalQuantity uint64 `json:"final-quantity"`
-	// Tax represents the tax applied to the operation.
+
+	// Tax é o imposto aplicado à transação, com formatação personalizada para JSON.
 	Tax MyFloat64 `json:"tax"`
 }
 
-// Op defines the type for operation identifiers (buy or sell).
+// Op define o tipo para identificar operações financeiras.
+//
+// Os valores esperados são as constantes OpBuy ("buy") e OpSell ("sell").
 type Op string
 
-// OpBuy and OpSell are constants representing buy and sell operations.
+// OpBuy representa uma operação de compra.
 var OpBuy Op = "buy"
 
-// OpSell is a constant representing a sell operation.
+// OpSell representa uma operação de venda.
 var OpSell Op = "sell"
 
-// IsBuy returns true if the operation is a buy operation.
+// IsBuy retorna true se a operação for do tipo "buy" (compra).
 func (op *Operation) IsBuy() bool {
 	return op.Operation == OpBuy
 }
 
-// IsSell returns true if the operation is a sell operation.
+// IsSell retorna true se a operação for do tipo "sell" (venda).
 func (op *Operation) IsSell() bool {
 	return op.Operation == OpSell
 }

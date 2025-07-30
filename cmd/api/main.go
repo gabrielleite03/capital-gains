@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+
 	s := bufio.NewScanner(os.Stdin)
 	var outs []string
 	for s.Scan() {
@@ -20,12 +21,6 @@ func main() {
 			break
 		}
 		capitalGainService := service.NewCapitalGainService(ports.NewStockService())
-		if text == "exit" {
-			break
-		}
-		if text == "quit" {
-			break
-		}
 
 		cps, _ := capitalGainService.GetCapitalGain(text)
 		out, _ := json.Marshal(cps)
